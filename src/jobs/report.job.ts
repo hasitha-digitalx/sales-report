@@ -240,10 +240,10 @@ export function startReportJob() {
       }
 
       /* =========================
-         STEP 2: PARALLEL UPLOAD
+         STEP 2: UPLOAD
       ========================= */
 
-      console.log('🚀 Starting parallel upload...');
+      console.log('🚀 Starting upload...');
 
       const limit = pLimit(1); // limit concurrency (change if needed)
 
