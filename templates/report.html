@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Report</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 20px;
+      color: #000000;
+      line-height: 1.4;
+    }
+
+    header {
+      margin-bottom: 20px;
+    }
+
+    /* Header Logo and Board Title */
+    .header-top {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-top img {
+      position: absolute;
+      left: 0;
+      padding-top: 10px;
+      padding-left: 100px;
+      height: 60px;
+      width: auto;
+    }
+
+    .header-top .header-center {
+      text-align: center;
+    }
+
+    .header-top h1 {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: bold;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    .header-top h6 {
+      margin: 2px 0 0 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: bold;
+      font-size: 10px;
+    }
+
+    /* Report header wrapper (title center, date right) */
+    .report-header-wrapper {
+      position: relative;
+      margin-top: 20px;
+      margin-bottom: 5px;
+      height: 24px; /* adjust based on font-size */
+    }
+
+    .report-title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: bold;
+      font-size: 10px;
+      text-decoration: underline;
+    }
+
+    .report-dates {
+      position: absolute;
+      right: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 9px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .report-times {
+      position: absolute;
+      right: 20px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: normal;
+      font-size: 9px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .report-title-agent-sales-return {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 10px;
+    }
+
+    .section-line {
+      border-top: 2px solid #000;
+      padding-top: 5px;
+      margin-top: 10px;
+    }
+
+    .no-border-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 10px;
+    }
+
+    .no-border-table td {
+      border: 1px solid #999;
+      padding: 2px 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 10px;
+    }
+
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed; /* IMPORTANT */
+    }
+
+    .info-table td {
+      width: 50%;
+      padding: 2px 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 10px;
+      vertical-align: top;
+      padding: 8px 0;
+    }
+
+    .info-table td:last-child {
+      text-align: left; /* keep same alignment */
+      padding-left: 40px; /* control spacing between columns */
+    }
+
+    /* Main data table */
+    table.main-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      border: 1px solid #000000;
+    }
+
+    table.main-table th {
+      border: 1px solid #000000;
+      padding: 6px 8px;
+      text-align: center;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: bold;
+      font-size: 10px;
+      background-color: #ffffff;
+    }
+
+    table.main-table td {
+      border-left: 1px solid #000000;
+      border-right: 1px solid #000000;
+      border-top: none;
+      border-bottom: none;
+      padding: 6px 8px;
+      text-align: center;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: normal;
+      font-size: 10px;
+    }
+
+    table.main-table tbody tr:nth-child(even) {
+      background-color: #ffffff;
+    }
+
+    /* Summary table */
+    .summary-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    table.summary-table {
+      border-collapse: collapse;
+      width: 320px;
+      font-size: 13px;
+      border: 1px solid #000000;
+    }
+
+    table.summary-table th {
+      border: 1px solid #000;
+      padding: 6px;
+      text-align: center;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: bold;
+      font-size: 10px;
+      background-color: #ffffff;
+    }
+
+    table.summary-table td {
+      border-left: 1px solid #000000;
+      border-right: 1px solid #000000;
+      border-top: none;
+      border-bottom: none;
+      padding: 6px;
+      text-align: center;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 10px;
+    }
+
+    table.summary-table td.total {
+      background-color: #ffffff;
+    }
+
+    .footer {
+    position: fixed;
+    bottom: 10px;
+    left: 20px;
+    right: 20px;
+    text-align: center;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 10px;
+    color: #000;
+  }
+  </style>
+</head>
+<body>
+  <header>
+    <!-- Header with logo -->
+    <div class="header-top">
+      <img src="assets/images.png" alt="Logo">
+      <div class="header-center">
+        <h1>NATIONAL LOTTERIES BOARD</h1>
+        <h6>No 32, Deshamanya N W J Mudalige Mawatha, Colombo 01</h6>
+      </div>
+      <div class="report-times">{{REPORT_DATE}} &nbsp;&nbsp; {{Time}}</div>
+    </div>
+
+    <!-- Report title centered, date right -->
+    <div class="report-header-wrapper">
+      <div class="report-title">Sales Report</div>
+      <div class="report-dates"><b>From:</b> {{REPORT_DATE}} &nbsp;&nbsp; <b>To:</b> {{REPORT_DATE}}</div>
+    </div>
+
+    <div class="section-line">
+      <table class="info-table">
+        <tr>
+          <td><b>Dealer:</b> Digital X Pvt Ltd</td>
+          <td><b>Lottery:</b> {{Lottery}}</td>
+        </tr>
+        <tr>
+          <td><b>Draw Date:</b> {{Draw_DATE}}</td>
+          <td><b>Draw No:</b> {{Draw_No}}</td>
+        </tr>
+      </table>
+
+      <p class="report-title-agent-sales-return"><u>Agent/Sales Return</u></p>
+    </div>
+  </header>
+
+  <!-- Main table -->
+  <table class="main-table">
+    <thead>
+      <tr> 
+        <th>Code</th>
+        <th>Agent Name</th>
+        <th>Issue/Return Date</th>
+        <th>Sales From</th>
+        <th>Sales To</th>
+        <th>Returns From</th>
+        <th>Returns To</th>
+        <th>Quantity</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{TABLE_ROWS}}
+    </tbody>
+  </table>
+
+  <!-- Summary table -->
+  <div class="summary-container">
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>Agents Sales</th>
+          <th>Agents Returns</th>
+          <th>Grand Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="total">{{AGENT_SALES}}</td>
+          <td class="total">{{AGENT_RETURNS}}</td>
+          <td class="total">{{GRAND_TOTAL}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+<div class="footer"></div>
+</body>
+</html>
