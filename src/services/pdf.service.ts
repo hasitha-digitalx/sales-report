@@ -29,7 +29,7 @@ export async function generatePDF(
       waitUntil: 'networkidle0'
     });
 
-    // Generate file path (DO NOT CHANGE FORMAT)
+    // Generate file path
     const filePath = path.join(
       __dirname,
       `../../reports/${buildFileName(lotteryId, drawNumber, 'PDF')}`

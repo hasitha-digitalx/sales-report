@@ -143,10 +143,10 @@ import { sftpConfig } from '../config/sftpConfig';
  */
 export function startReportJob() {
 
-  cron.schedule('32 11 * * *', async () => {
+  cron.schedule('12 13 * * *', async () => {
 
     console.log('==============================');
-    console.log('🚀 Lottery Report Job Started');
+    console.log('Lottery Report Job Started');
     console.log('==============================');
 
     const today = new Date().toISOString().split('T')[0];
@@ -164,7 +164,7 @@ export function startReportJob() {
           await fs.remove(filePath);
         }
       } catch (err) {
-        console.error('❌ Delete failed:', filePath, err);
+        console.error('Delete failed:', filePath, err);
       }
     };
 
@@ -183,32 +183,32 @@ export function startReportJob() {
 
         try {
 
-          // 🔎 Get today's draw number
+          // Get today's draw number
           const drawNumber = await getTodayDraw(lotteryId);
 
           if (!drawNumber) {
-            console.log(`⚠️ No draw found for Lottery ${lotteryId}`);
+            console.log(`No draw found for Lottery ${lotteryId}`);
             continue;
           }
 
-          // 📊 Fetch lottery data
+          // Fetch lottery data
           const data = await getLotteryData(lotteryId, drawNumber);
 
           if (!data || data.length === 0) {
-            console.log(`⚠️ No data for Lottery ${lotteryId}`);
+            console.log(`No data for Lottery ${lotteryId}`);
             continue;
           }
 
-          console.log(`📦 Processing Lottery ${lotteryId}, Draw ${drawNumber}`);
+          console.log(`Processing Lottery ${lotteryId}, Draw ${drawNumber}`);
 
-          // 🧾 Build HTML content
+          // Build HTML content
           const html = buildHTML(data);
 
-          // 📄 Generate PDF + TXT files
+          // Generate PDF + TXT files
           pdfPath = await generatePDF(html, lotteryId, drawNumber, reportDir);
           textPath = await generateText(data, lotteryId, drawNumber, reportDir);
 
-          // 🗜️ Create ZIP file
+          // Create ZIP file
           const zipPath = path.join(
             reportDir,
             buildZipName(lotteryId, drawNumber)
@@ -222,13 +222,13 @@ export function startReportJob() {
             zipPath
           );
 
-          console.log('✅ ZIP Created:', zipPath);
+          console.log('ZIP Created:', zipPath);
 
           // 💾 store for upload step
           zipFiles.push(zipPath);
 
         } catch (err) {
-          console.error(`❌ Error generating Lottery ${lotteryId}:`, err);
+          console.error(`Error generating Lottery ${lotteryId}:`, err);
 
         } finally {
           // 🧹 cleanup temp files
@@ -243,7 +243,7 @@ export function startReportJob() {
          STEP 2: UPLOAD
       ========================= */
 
-      console.log('🚀 Starting upload...');
+      console.log('Starting upload...');
 
       const limit = pLimit(1); // limit concurrency (change if needed)
 
@@ -251,7 +251,7 @@ export function startReportJob() {
         zipFiles.map(file =>
           limit(async () => {
             const remotePath = await uploadFileSFTP(file, sftpConfig);
-            //console.log('⬆️ Uploaded:', remotePath);
+            //console.log('Uploaded:', remotePath);
             return remotePath;
           })
         )
@@ -269,18 +269,18 @@ export function startReportJob() {
           success.push(res.value);
         } else {
           failed.push(zipFiles[index]);
-          console.error('❌ Failed upload:', zipFiles[index]);
+          console.error('Failed upload:', zipFiles[index]);
         }
       });
 
       console.log('==============================');
-      console.log('🎯 UPLOAD COMPLETE');
+      console.log('UPLOAD COMPLETE');
       console.log('Success:', success.length);
       console.log('Failed:', failed.length);
       console.log('==============================');
 
     } catch (error) {
-      console.error('💥 Job Failed:', error);
+      console.error('Job Failed:', error);
     }
 
     console.log('==============================\n');

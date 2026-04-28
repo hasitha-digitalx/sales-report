@@ -22,7 +22,7 @@ function formatField(value: any, length: number): string {
   return String(value ?? '').padEnd(length, ' ');
 }
 
-// Column widths (DO NOT CHANGE)
+// Column width
 const COL1 = 8;
 const COL2 = 23;
 const COL3 = 15;
@@ -47,7 +47,7 @@ export async function generateText(
     // Ensure folder exists
     await fs.ensureDir(reportDir);
 
-    // File name (DO NOT CHANGE FORMAT)
+    // File name
     const filePath = path.join(
       reportDir,
       buildFileName(lotteryId, drawNumber, 'TXT')

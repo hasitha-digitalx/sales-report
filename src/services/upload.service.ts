@@ -51,12 +51,12 @@ export async function uploadFileSFTP(
 
       await sftp.put(localFilePath, remoteFilePath);
 
-      console.log('✅ Upload success:', remoteFilePath);
+      console.log('Upload success:', remoteFilePath);
 
       return remoteFilePath;
 
     } catch (err) {
-      console.error(`❌ Upload failed (attempt ${attempt}):`, err);
+      console.error(`Upload failed (attempt ${attempt}):`, err);
 
       if (attempt === retries) {
         throw err;
@@ -71,7 +71,7 @@ export async function uploadFileSFTP(
   throw new Error('Upload failed');
 
   } finally {
-    // ✅ ALWAYS CLOSE ONCE
+    // ALWAYS CLOSE ONCE
     try {
       await sftp.end();
     } catch (err) {
