@@ -1,6 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
 export const sftpConfig = {
   host: process.env.SFTP_HOST!,
   port: Number(process.env.SFTP_PORT || 22),
