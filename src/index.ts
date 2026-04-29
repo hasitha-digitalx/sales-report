@@ -1,15 +1,18 @@
 import 'dotenv/config'; 
-import './config/db';
-import './config/sftpConfig';
 import { startReportJob } from './jobs/report.job';
 import { checkDB } from './config/db.health';
 
 console.log('Starting application...');
 
 (async () => {
-  await checkDB(); // IMPORTANT
+  try {
+    await checkDB();
 
-  startReportJob();
+    startReportJob();
 
-  console.log('App started successfully');
+    console.log('App started successfully');
+  } catch (error) {
+    console.error('Failed to start app:', error);
+    process.exit(1); 
+  }
 })();

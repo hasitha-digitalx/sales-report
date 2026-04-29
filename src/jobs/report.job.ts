@@ -143,7 +143,7 @@ import { sftpConfig } from '../config/sftpConfig';
  */
 export function startReportJob() {
 
-  cron.schedule('31 10 * * *', async () => {
+  cron.schedule('48 10 * * *', async () => {
 
     console.log('==============================');
     console.log('Lottery Report Job Started');
