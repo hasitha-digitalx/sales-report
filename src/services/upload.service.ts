@@ -28,21 +28,20 @@ export async function uploadFileSFTP(
     path.basename(localFilePath)
   );
 
-  const sftp = new SFTPClient();
+  for (let attempt = 1; attempt <= retries; attempt++) {
 
-  try {
-    await sftp.connect({
+    const sftp = new SFTPClient();
+
+    try {
+      console.log(`SFTP Attempt ${attempt}/${retries}`);
+
+      await sftp.connect({
       host: config.host,
       port: config.port || 22,
       username: config.username,
       password: config.password,
       privateKey: config.privateKey
     });
-
-  for (let attempt = 1; attempt <= retries; attempt++) {
-
-    try {
-      console.log(`SFTP Attempt ${attempt}/${retries}`);
 
       // create remote folder if not exists
       await sftp.mkdir(remoteDir, true);
@@ -65,17 +64,15 @@ export async function uploadFileSFTP(
       await new Promise(res =>
         setTimeout(res, 2000 * attempt)
       );
+      } finally {
+      try {
+      await sftp.end();
+    } catch (err) {
+      console.error('SFTP close error:', err);
+    }
     }
   }
 
   throw new Error('Upload failed');
 
-  } finally {
-    // ALWAYS CLOSE ONCE
-    try {
-      await sftp.end();
-    } catch (err) {
-      console.error('SFTP close error:', err);
-    }
-  }
 } 

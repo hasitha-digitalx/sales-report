@@ -23,7 +23,7 @@ export function buildHTML(data: LotteryReport[]): string {
   html = html.replace('{{Draw_DATE}}', drawDate);
 
   // Table rows (UPDATED)
-  const rows = data.map((row, index) => {
+  const rows = data.map((row) => {
   // Convert ReturnDate to YYYY-MM-DD if it exists
     let returnDate = '';
     if (row.ReturnDate) {

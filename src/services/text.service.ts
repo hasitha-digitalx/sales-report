@@ -42,7 +42,8 @@ export async function generateText(
 
   try {
 
-    const reportDir = path.join(__dirname, '../../reports');
+    // const reportDir = path.join(__dirname, '../../reports');
+    
 
     // Ensure folder exists
     await fs.ensureDir(reportDir);

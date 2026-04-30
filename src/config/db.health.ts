@@ -7,6 +7,6 @@ export async function checkDB() {
     return true;
   } catch (error) {
     console.error('Database connection failed:', error);
-    process.exit(1); // stop app
+    throw error;
   }
 }

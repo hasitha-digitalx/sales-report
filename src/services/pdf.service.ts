@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer';
 import path from 'path';
+import fs from 'fs-extra';
 import { buildFileName } from '../utils/fileName.util';
 
 /**
@@ -17,6 +18,8 @@ export async function generatePDF(
 
   try {
 
+    await fs.ensureDir(reportDir); 
+
     // Launch browser
     browser = await puppeteer.launch({
       args: ['--no-sandbox']
@@ -30,11 +33,15 @@ export async function generatePDF(
     });
 
     // Generate file path
+    // const filePath = path.join(
+    //   __dirname,
+    //   `../../reports/${buildFileName(lotteryId, drawNumber, 'PDF')}`
+    // );
     const filePath = path.join(
-      __dirname,
-      `../../reports/${buildFileName(lotteryId, drawNumber, 'PDF')}`
+      reportDir,                                                      // ← uses the parameter
+      buildFileName(lotteryId, drawNumber, 'PDF')
     );
-
+    
     // Generate PDF
     await page.pdf({
       path: filePath,

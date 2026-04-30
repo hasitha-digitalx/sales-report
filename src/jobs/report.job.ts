@@ -1,129 +1,3 @@
-// import cron from 'node-cron';
-// import path from 'path';
-// import fs from 'fs-extra';
-
-// import { getLotteryData, getTodayDraw } from '../services/data.service';
-// import { buildHTML } from '../utils/template.util';
-// import { generatePDF } from '../services/pdf.service';
-// import { generateText } from '../services/text.service';
-// import { createZip } from '../services/zip.service';
-// import { buildZipName } from '../utils/fileName.util';
-// import { uploadFileSFTP } from '../services/upload.service';
-// import { sftpConfig } from '../config/sftpConfig';
-
-// /**
-//  * Start cron job
-//  */
-// export function startReportJob() {
-
-//   cron.schedule('37 12 * * *', async () => {
-
-//     console.log('==============================');
-//     console.log('Running Lottery Report Job');
-//     console.log('==============================');
-
-//     const today = new Date().toISOString().split('T')[0];
-
-//     // ✅ LOCAL DAILY FOLDER
-//     const reportDir = path.join(__dirname, `../../reports/${today}`);
-//     await fs.ensureDir(reportDir);
-
-//     // ✅ SFTP CONFIG (DAILY FOLDER)
-//     // const sftpConfig = {
-//     //   host: process.env.SFTP_HOST!,
-//     //   port: Number(process.env.SFTP_PORT || 22),
-//     //   username: process.env.SFTP_USER!,
-//     //   password: process.env.SFTP_PASS!,
-//     //   remoteDir: process.env.SFTP_REMOTE_DIR!,
-//     //   retries: Number(process.env.SFTP_RETRIES || 3)
-//     // };
-
-//     const safeDelete = async (filePath: string) => {
-//       try {
-//         if (await fs.pathExists(filePath)) {
-//           await fs.remove(filePath);
-//         }
-//       } catch (err) {
-//         console.error('Delete failed:', filePath, err);
-//       }
-//     };
-
-//     try {
-
-//       const lotteryIds = [1, 2, 72, 84, 42, 3, 88];
-//       const uploadedFiles: string[] = [];
-
-//       for (const lotteryId of lotteryIds) {
-
-//         let pdfPath = '';
-//         let textPath = '';
-
-//         try {
-
-//           const drawNumber = await getTodayDraw(lotteryId);
-
-//           if (!drawNumber) {
-//             console.log(`No draw found for Lottery ${lotteryId}`);
-//             continue;
-//           }
-
-//           console.log(`Processing Lottery ${lotteryId}, Draw ${drawNumber}`);
-
-//           const data = await getLotteryData(lotteryId, drawNumber);
-
-//           if (!data || data.length === 0) {
-//             console.log(`No data for Lottery ${lotteryId}`);
-//             continue;
-//           }
-
-//           const html = buildHTML(data);
-
-//           // ✅ generate files INSIDE today's folder
-//           pdfPath = await generatePDF(html, lotteryId, drawNumber,reportDir);
-//           textPath = await generateText(data, lotteryId, drawNumber,reportDir);
-
-//           const zipPath = path.join(reportDir, buildZipName(lotteryId, drawNumber));
-
-//           await createZip(
-//             [
-//               { path: pdfPath, name: path.basename(pdfPath) },
-//               { path: textPath, name: path.basename(textPath) }
-//             ],
-//             zipPath
-//           );
-
-//           console.log('ZIP Created:', zipPath);
-
-//           // ✅ UPLOAD ONLY TODAY FILE
-//           const remotePath = await uploadFileSFTP(zipPath, sftpConfig);
-
-//           uploadedFiles.push(remotePath);
-
-//         } catch (err) {
-//           console.error(`Error Lottery ${lotteryId}:`, err);
-
-//         } finally {
-//           // delete temp files only
-//           await Promise.all([
-//             safeDelete(pdfPath),
-//             safeDelete(textPath)
-//           ]);
-//         }
-//       }
-
-//       console.log('\n✅ ALL REPORTS COMPLETED');
-//       console.log(`Uploaded ${uploadedFiles.length} files for ${today}`);
-//       console.log(uploadedFiles);
-
-//     } catch (error) {
-//       console.error('Job Failed:', error);
-//     }
-
-//     console.log('==============================\n');
-//   });
-// }
-
-
 import cron from 'node-cron';
 import path from 'path';
 import fs from 'fs-extra';
@@ -137,13 +11,13 @@ import { createZip } from '../services/zip.service';
 import { buildZipName } from '../utils/fileName.util';
 import { uploadFileSFTP } from '../services/upload.service';
 import { sftpConfig } from '../config/sftpConfig';
-
+import { reportConfig } from '../config/reportConfig';
 /**
  * Start Lottery Report Cron Job
  */
 export function startReportJob() {
 
-  cron.schedule('48 10 * * *', async () => {
+  cron.schedule('10 13 * * *', async () => {
 
     console.log('==============================');
     console.log('Lottery Report Job Started');
@@ -152,7 +26,8 @@ export function startReportJob() {
     const today = new Date().toISOString().split('T')[0];
 
     // 📁 LOCAL DAILY REPORT DIRECTORY
-    const reportDir = path.join(__dirname, `../../reports/${today}`);
+    // const reportDir = path.join(__dirname, `../../reports/${today}`);
+    const reportDir = path.join(reportConfig.reportDir, today);
     await fs.ensureDir(reportDir);
 
     /**
