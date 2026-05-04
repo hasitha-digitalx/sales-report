@@ -17,7 +17,7 @@ import { reportConfig } from '../config/reportConfig';
  */
 export function startReportJob() {
 
-  cron.schedule('10 13 * * *', async () => {
+  cron.schedule('55 08 * * *', async () => {
 
     console.log('==============================');
     console.log('Lottery Report Job Started');

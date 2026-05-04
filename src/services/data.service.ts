@@ -43,8 +43,8 @@ export async function getLotteryData(
                 WHEN t.status = 13 THEN 'RETURNS'
             END AS ticket_type
 
-        FROM lucky1.Tickets t
-        JOIN lucky1.Lotteries l ON t.lotteryId = l.id
+        FROM Tickets t
+        JOIN Lotteries l ON t.lotteryId = l.id
 
         WHERE t.status IN (6,7,15,13)
           AND t.lotteryId = ?
@@ -94,7 +94,7 @@ export async function getTodayDraw(lotteryId: number): Promise<number | null> {
   const [rows]: any = await db.execute(
     `
     SELECT drawNumber
-    FROM lucky1.draws
+    FROM draws
     WHERE lotteryId = ? 
     AND status = 5
     AND DATE(drawDate) = '2020-03-19'

@@ -1,3 +1,4 @@
+process.env.TZ = 'Asia/Colombo'; // Set timezone to Asia/Colombo
 import 'dotenv/config'; 
 import { startReportJob } from './jobs/report.job';
 import { checkDB } from './config/db.health';
